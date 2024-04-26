@@ -154,3 +154,17 @@ test('allow 2nd process to be done before the 1st')
             },
         )
     )->toEqual([2,1]);
+
+test('allow 1st process to be done before the 2nd')
+    ->expect(
+        fn () => Fork::new()->run(
+            static function () {
+                usleep(100_000);
+                return 1;
+            },
+            static function () {
+                usleep(200_000);
+                return 2;
+            },
+        )
+    )->toEqual([1, 2]);
